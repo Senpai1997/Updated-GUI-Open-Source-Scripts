@@ -10,7 +10,8 @@ ScreenGui.Parent = CoreGui
 -- Main Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Size = UDim2.new(0, 320, 0, 160)
-MainFrame.Position = UDim2.new(0.02, 0, 0.65, 0)
+-- >> POSITION CHANGED: Moved to the top-right corner of the screen
+MainFrame.Position = UDim2.new(1, -340, 0, 20) -- 20px from top, 20px from right
 MainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
@@ -35,12 +36,13 @@ HeaderFrame.Parent = MainFrame
 local HeaderCorner = Instance.new("UICorner", HeaderFrame)
 HeaderCorner.CornerRadius = UDim.new(0, 12)
 
--- Minimalist Icon (Updated to Lightning Bolt)
+-- Minimalist Icon (Updated to a new Lightning Bolt)
 local Icon = Instance.new("ImageLabel")
 Icon.Size = UDim2.new(0, 28, 0, 28)
 Icon.Position = UDim2.new(0.04, 0, 0.5, -14)
 Icon.BackgroundTransparency = 1
-Icon.Image = "rbxassetid://921522425" -- Minimal line art lightning bolt icon
+-- >> ICON CHANGED: Using a new, more reliable asset ID for a minimal lightning bolt
+Icon.Image = "rbxassetid://11691889855"
 Icon.ImageColor3 = Color3.fromRGB(195, 195, 215)
 Icon.Parent = HeaderFrame
 
