@@ -6,10 +6,10 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 ]]
 local Window = Rayfield:CreateWindow({
    Name = "Senpai Hub",
-   Icon = 11691889855, -- Minimal lightning bolt icon
+   Icon = 10590477450, -- Minimal lightning bolt icon
    LoadingTitle = "Senpai Hub",
    LoadingSubtitle = "Loading...",
-   ShowText = "Show Senpai Hub", -- for mobile users to unhide rayfield
+   ShowText = "Senpai Hub", -- for mobile users to unhide rayfield
    Theme = "Midnight", -- Changed to a black theme
 
    ToggleUIKeybind = "K",
