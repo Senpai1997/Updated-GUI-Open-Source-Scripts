@@ -1,50 +1,49 @@
--- The Rayfield library is loaded here. This part is essential for the UI to work.
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 --[[
-    UI Configuration Updated for Senpai Hub
-    - New theme, colors, and icon
-    - All previous names and text have been replaced
-    - Functionality remains untouched
+    UI has been updated to "Senpai Hub" with a new black theme.
+    Core configuration has been kept identical to the original script to ensure it executes correctly.
 ]]
 local Window = Rayfield:CreateWindow({
    Name = "Senpai Hub",
-   Icon = 11691889855, -- A clean, minimal lightning bolt icon
+   Icon = 11691889855, -- Minimal lightning bolt icon
    LoadingTitle = "Senpai Hub",
-   LoadingSubtitle = "Initializing...",
-   ShowText = "Show Senpai Hub", -- For mobile users to unhide the UI
-   Theme = "Midnight", -- Changed from "Serenity" to "Midnight" for a new look
+   LoadingSubtitle = "Loading...",
+   ShowText = "Show Senpai Hub", -- for mobile users to unhide rayfield
+   Theme = "Midnight", -- Changed to a black theme
 
-   ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility
+   ToggleUIKeybind = "K",
 
    DisableRayfieldPrompts = false,
    DisableBuildWarnings = false,
 
+   -- This configuration is kept as it was in the original script to prevent errors.
    ConfigurationSaving = {
       Enabled = true,
-      FolderName = "SenpaiHub", -- Creates a safe folder for your configs
-      FileName = "SenpaiHubConfig"
+      FolderName = ud,
+      FileName = "rape Hub"
    },
 
    Discord = {
-      Enabled = false, -- Disabled by default
+      Enabled = false,
       Invite = "noinvitelink",
       RememberJoins = true
    },
 
-   KeySystem = false, -- Disabled by default
+   KeySystem = false,
    KeySettings = {
-      Title = "Senpai Hub",
+      Title = "Senpai Hub", -- Only the visible title is changed
       Subtitle = "Key System",
       Note = "No method of obtaining the key is provided",
-      FileName = "SenpaiKey",
+      FileName = "Key",
       SaveKey = true,
       GrabKeyFromSite = false,
       Key = {"Hello"}
    }
 })
 
--- All tabs and buttons below are the same as the original script, preserving functionality.
+-- All functionality below this line is unchanged.
+
 -- Create Tabs
 local MiscTab = Window:CreateTab("Misc", 4483362458)
 local LocalTab = Window:CreateTab("Local", 4483362458)
@@ -1484,7 +1483,7 @@ ServerTab:CreateButton({
       if target then
          TeleportService:TeleportToPlaceInstance(placeId, target, player)
       else
-         warn("⚠️ Could not find another server.")
+         warn("⚠️ Không tìm được server khác.")
       end
    end,
 })
@@ -1512,7 +1511,7 @@ ServerTab:CreateButton({
       label.Parent = screenGui
 
       for i = 5, 1, -1 do
-         label.Text = "Finding server with <5 players in " .. i .. "..."
+         label.Text = "Tìm server < 5 người trong " .. i .. "..."
          task.wait(1)
       end
 
@@ -1556,7 +1555,7 @@ ServerTab:CreateButton({
       if target then
          TeleportService:TeleportToPlaceInstance(placeId, target, player)
       else
-         warn("⚠️ Could not find a server with <5 players.")
+         warn("⚠️ Không tìm được server < 5 người.")
       end
    end,
 })
@@ -1604,7 +1603,7 @@ ServerTab:CreateButton({
       noBtn.Font = Enum.Font.GothamBold
 
       yesBtn.MouseButton1Click:Connect(function()
-         player:Kick("You have exited the server.")
+         player:Kick("Bạn đã thoát khỏi server.")
       end)
 
       noBtn.MouseButton1Click:Connect(function()
@@ -1789,7 +1788,7 @@ LocalTab:CreateToggle({
                      if anim and isBlocked(anim.AnimationId) then
                         track:Stop(0)
                         pcall(function() track:Destroy() end)
-                        print("🚫 Blocked animation: " .. anim.AnimationId)
+                        print("🚫 Dừng animation bị chặn: " .. anim.AnimationId)
                      end
                   end
                end
@@ -2308,7 +2307,7 @@ LocalTab:CreateToggle({
                      if anim and isBlocked(anim.AnimationId) then
                         track:Stop(0)
                         pcall(function() track:Destroy() end)
-                        print("🚫 Blocked animation: " .. anim.AnimationId)
+                        print("🚫 Dừng animation bị chặn: " .. anim.AnimationId)
                      end
                   end
                end
@@ -2330,3 +2329,27 @@ LocalTab:CreateToggle({
 
       local lp = Players.LocalPlayer
       local cam = Workspace.CurrentCamera
+
+      if _G.FaceCamConnection then
+         _G.FaceCamConnection:Disconnect()
+         _G.FaceCamConnection = nil
+      end
+
+      if Value then
+         _G.FaceCamConnection = RunService.RenderStepped:Connect(function()
+            local char = lp.Character
+            if not char then return end
+
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
+
+            local camLook = cam.CFrame.LookVector
+            local lookDir = Vector3.new(camLook.X, 0, camLook.Z).Unit
+
+            hrp.CFrame = CFrame.new(hrp.Position, hrp.Position + lookDir)
+         end)
+      end
+   end,
+})
+
+Window:Show()
