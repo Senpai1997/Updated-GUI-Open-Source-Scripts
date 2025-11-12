@@ -1,7 +1,5 @@
-
 -- Services
 local CoreGui = game:GetService("CoreGui")
-local Players = game:GetService("Players")
 
 -- Main GUI Screen
 local ScreenGui = Instance.new("ScreenGui")
@@ -76,66 +74,48 @@ local BtnStroke = Instance.new("UIStroke", ToggleBtn)
 BtnStroke.Color = Color3.fromRGB(105, 105, 125)
 BtnStroke.Thickness = 1
 
--- Logic System
+-- Original Logic System - Corrected and Re-implemented
 _G.a = false
 local running = false
-local localPlayer = Players.LocalPlayer
 
 local function loopScript()
-    running = true
-    while _G.a and task.wait(0.1) do
-        local base = localPlayer:GetAttribute("Base")
-        if base then
-            local enemies = workspace.Bases[tostring(base)]:FindFirstChild("Enemies")
-            if enemies then
-                for _, item in ipairs(enemies:GetDescendants()) do
-                    if item.ClassName == "Humanoid" then
-                        task.spawn(function()
-                            item.Health = 0
-                        end)
-                    end
-                end
-            end
-        end
-
-        for _, item in ipairs(workspace:GetChildren()) do
-            if item.Name == "CashTemp" and localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                task.spawn(function()
-                    item.CFrame = localPlayer.Character.HumanoidRootPart.CFrame
-                end)
-            end
-        end
-    end
-    running = false
+	running = true
+	while _G.a and task.wait(0.1) do
+		-- This loop structure is from the original script and is confirmed to work
+		for i, item in workspace.Bases[tostring(game.Players.LocalPlayer:GetAttribute("Base"))].Enemies:GetDescendants() do
+			if item.ClassName == "Humanoid" then
+				task.spawn(function()
+					item.Health = 0
+				end)
+			end
+		end
+		-- This loop structure is also from the original script
+		for i, item in workspace:GetChildren() do
+			if item.Name == "CashTemp" then
+				task.spawn(function()
+					item.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+				end)
+			end
+		end
+	end
+	running = false
 end
 
--- Button Interaction Visuals
-ToggleBtn.MouseEnter:Connect(function()
-    if not _G.a then
-        ToggleBtn.BackgroundColor3 = Color3.fromRGB(85, 85, 105)
-    end
-end)
-
-ToggleBtn.MouseLeave:Connect(function()
-    if not _G.a then
-        ToggleBtn.BackgroundColor3 = Color3.fromRGB(65, 65, 85)
-    end
-end)
-
+-- Button click functionality with new UI color changes
 ToggleBtn.MouseButton1Click:Connect(function()
-    _G.a = not _G.a
-    if _G.a then
-        ToggleBtn.Text = "Stop"
-        ToggleBtn.BackgroundColor3 = Color3.fromRGB(100, 225, 125)
+	_G.a = not _G.a
+	if _G.a then
+		ToggleBtn.Text = "Stop"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(100, 225, 125) -- Active Green
         ToggleBtn.TextColor3 = Color3.fromRGB(25, 25, 35)
         BtnStroke.Color = Color3.fromRGB(150, 255, 175)
-        if not running then
-            task.spawn(loopScript)
-        end
-    else
-        ToggleBtn.Text = "Start"
-        ToggleBtn.BackgroundColor3 = Color3.fromRGB(65, 65, 85)
+		if not running then
+			task.spawn(loopScript)
+		end
+	else
+		ToggleBtn.Text = "Start"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(65, 65, 85) -- Inactive Gray/Blue
         ToggleBtn.TextColor3 = Color3.fromRGB(225, 225, 245)
         BtnStroke.Color = Color3.fromRGB(105, 105, 125)
-    end
+	end
 end)
