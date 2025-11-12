@@ -6,7 +6,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 ]]
 local Window = Rayfield:CreateWindow({
    Name = "Senpai Hub",
-   Icon = 10590477450, -- Minimal lightning bolt icon
+   Icon = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap-icon lucide-zap"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>, -- Minimal lightning bolt icon
    LoadingTitle = "Senpai Hub",
    LoadingSubtitle = "Loading...",
    ShowText = "Senpai Hub", -- for mobile users to unhide rayfield
