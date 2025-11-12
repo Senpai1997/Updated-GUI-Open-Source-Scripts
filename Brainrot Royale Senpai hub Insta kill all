@@ -1,0 +1,141 @@
+
+-- Services
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+
+-- Main GUI Screen
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "SenpaiHubGUI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = CoreGui
+
+-- Main Frame
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 320, 0, 160)
+MainFrame.Position = UDim2.new(0.02, 0, 0.65, 0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Parent = ScreenGui
+
+-- UI Elements for a modern look
+local UICorner = Instance.new("UICorner", MainFrame)
+UICorner.CornerRadius = UDim.new(0, 12)
+
+local UIStroke = Instance.new("UIStroke", MainFrame)
+UIStroke.Color = Color3.fromRGB(85, 85, 105)
+UIStroke.Thickness = 1.5
+
+-- Header Frame
+local HeaderFrame = Instance.new("Frame")
+HeaderFrame.Size = UDim2.new(1, 0, 0, 40)
+HeaderFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+HeaderFrame.BorderSizePixel = 0
+HeaderFrame.Parent = MainFrame
+
+local HeaderCorner = Instance.new("UICorner", HeaderFrame)
+HeaderCorner.CornerRadius = UDim.new(0, 12)
+
+-- Minimalist Icon
+local Icon = Instance.new("ImageLabel")
+Icon.Size = UDim2.new(0, 28, 0, 28)
+Icon.Position = UDim2.new(0.04, 0, 0.5, -14)
+Icon.BackgroundTransparency = 1
+Icon.Image = "rbxassetid://6033424651" -- A simple, clean hub-like icon
+Icon.ImageColor3 = Color3.fromRGB(195, 195, 215)
+Icon.Parent = HeaderFrame
+
+-- Title
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(0.8, 0, 1, 0)
+Title.Position = UDim2.new(0.15, 0, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "Senpai Hub"
+Title.TextColor3 = Color3.fromRGB(235, 235, 255)
+Title.TextSize = 24
+Title.Font = Enum.Font.GothamBold
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = HeaderFrame
+
+-- Toggle Button
+local ToggleBtn = Instance.new("TextButton")
+ToggleBtn.Size = UDim2.new(0.9, 0, 0, 50)
+ToggleBtn.Position = UDim2.new(0.05, 0, 0.5, 10)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(65, 65, 85)
+ToggleBtn.TextColor3 = Color3.fromRGB(225, 225, 245)
+ToggleBtn.Text = "Start"
+ToggleBtn.TextSize = 22
+ToggleBtn.Font = Enum.Font.GothamSemibold
+ToggleBtn.Parent = MainFrame
+
+local BtnCorner = Instance.new("UICorner", ToggleBtn)
+BtnCorner.CornerRadius = UDim.new(0, 10)
+
+local BtnStroke = Instance.new("UIStroke", ToggleBtn)
+BtnStroke.Color = Color3.fromRGB(105, 105, 125)
+BtnStroke.Thickness = 1
+
+-- Logic System
+_G.a = false
+local running = false
+local localPlayer = Players.LocalPlayer
+
+local function loopScript()
+    running = true
+    while _G.a and task.wait(0.1) do
+        local base = localPlayer:GetAttribute("Base")
+        if base then
+            local enemies = workspace.Bases[tostring(base)]:FindFirstChild("Enemies")
+            if enemies then
+                for _, item in ipairs(enemies:GetDescendants()) do
+                    if item.ClassName == "Humanoid" then
+                        task.spawn(function()
+                            item.Health = 0
+                        end)
+                    end
+                end
+            end
+        end
+
+        for _, item in ipairs(workspace:GetChildren()) do
+            if item.Name == "CashTemp" and localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                task.spawn(function()
+                    item.CFrame = localPlayer.Character.HumanoidRootPart.CFrame
+                end)
+            end
+        end
+    end
+    running = false
+end
+
+-- Button Interaction Visuals
+ToggleBtn.MouseEnter:Connect(function()
+    if not _G.a then
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(85, 85, 105)
+    end
+end)
+
+ToggleBtn.MouseLeave:Connect(function()
+    if not _G.a then
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(65, 65, 85)
+    end
+end)
+
+ToggleBtn.MouseButton1Click:Connect(function()
+    _G.a = not _G.a
+    if _G.a then
+        ToggleBtn.Text = "Stop"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(100, 225, 125)
+        ToggleBtn.TextColor3 = Color3.fromRGB(25, 25, 35)
+        BtnStroke.Color = Color3.fromRGB(150, 255, 175)
+        if not running then
+            task.spawn(loopScript)
+        end
+    else
+        ToggleBtn.Text = "Start"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(65, 65, 85)
+        ToggleBtn.TextColor3 = Color3.fromRGB(225, 225, 245)
+        BtnStroke.Color = Color3.fromRGB(105, 105, 125)
+    end
+end)
