@@ -8,214 +8,193 @@ local gui = Instance.new("ScreenGui", PlayerGui)
 gui.Name = "SenpaiHubGui"
 gui.ResetOnSpawn = false
 
---================================================================================--
---// UI Library
---================================================================================--
+-- UI Setup
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 220, 0, 150)
+mainFrame.Position = UDim2.new(0.5, -110, 0.5, -75)
+mainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Darker background
+mainFrame.BorderColor3 = Color3.fromRGB(80, 80, 80)
+mainFrame.BorderSizePixel = 2
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Visible = true
+mainFrame.Parent = gui
 
-local SenpaiHub = {}
+local cornerRadius = 8 -- Increased corner radius for a softer look
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, cornerRadius)
+corner.Parent = mainFrame
 
-function SenpaiHub:CreateWindow()
-    local mainFrame = Instance.new("Frame")
-    mainFrame.Size = UDim2.new(0, 350, 0, 250)
-    mainFrame.Position = UDim2.new(0.5, -175, 0.5, -125)
-    mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    mainFrame.BorderColor3 = Color3.fromRGB(80, 80, 80)
-    mainFrame.BorderSizePixel = 1
-    mainFrame.Active = true
-    mainFrame.Draggable = true
-    mainFrame.Visible = true
-    mainFrame.Parent = gui
+-- Toggle Button
+local toggleDetect = Instance.new("TextButton", mainFrame)
+toggleDetect.Size = UDim2.new(0.7, 0, 0, 30)
+toggleDetect.Position = UDim2.new(0, 0, 0, 0)
+toggleDetect.Text = "Auto Block: OFF"
+toggleDetect.BackgroundColor3 = Color3.fromRGB(70, 70, 70) -- Slightly lighter button
+toggleDetect.TextColor3 = Color3.new(1, 1, 1)
+toggleDetect.Font = Enum.Font.SourceSansBold
+toggleDetect.TextScaled = true
+local toggleCorner = Instance.new("UICorner")
+toggleCorner.CornerRadius = UDim.new(0, cornerRadius)
+toggleCorner.Parent = toggleDetect
 
-    local corner = Instance.new("UICorner", mainFrame)
-    corner.CornerRadius = UDim.new(0, 8)
+-- Open Button
+local openBtn = Instance.new("TextButton", mainFrame)
+openBtn.Size = UDim2.new(0.3, 0, 0, 30)
+openBtn.Position = UDim2.new(0.7, 0, 0, 0)
+openBtn.Text = ">"
+openBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+openBtn.TextColor3 = Color3.new(1, 1, 1)
+openBtn.Font = Enum.Font.SourceSansBold
+openBtn.TextScaled = true
+local openCorner = Instance.new("UICorner")
+openCorner.CornerRadius = UDim.new(0, cornerRadius)
+openCorner.Parent = openBtn
 
-    local header = Instance.new("Frame", mainFrame)
-    header.Size = UDim2.new(1, 0, 0, 40)
-    header.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+-- Settings Frame
+local settingFrame = Instance.new("Frame", mainFrame)
+settingFrame.Size = UDim2.new(1, 0, 0, 140)
+settingFrame.Position = UDim2.new(0, 0, 0, 30)
+settingFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- Settings frame background
+settingFrame.Visible = false
+local settingCorner = Instance.new("UICorner")
+settingCorner.CornerRadius = UDim.new(0, cornerRadius)
+settingCorner.Parent = settingFrame
 
-    local headerCorner = Instance.new("UICorner", header)
-    headerCorner.CornerRadius = UDim.new(0, 8)
+-- Senpai Hub Title
+local title = Instance.new("TextLabel", mainFrame)
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, -35)
+title.BackgroundColor3 = Color3.new(0, 0, 0)
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1, 1, 1)
+title.Font = Enum.Font.SourceSansBold
+title.TextScaled = true
+title.Text = "Senpai Hub"
+title.Parent = mainFrame
 
-    local title = Instance.new("TextLabel", header)
-    title.Size = UDim2.new(1, -80, 1, 0)
-    title.Position = UDim2.new(0, 10, 0, 0)
-    title.Text = "Senpai Hub"
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.Font = Enum.Font.SourceSansBold
-    title.TextSize = 20
-    title.TextXAlignment = Enum.TextXAlignment.Left
-
-    local closeButton = Instance.new("TextButton", header)
-    closeButton.Size = UDim2.new(0, 30, 0, 30)
-    closeButton.Position = UDim2.new(1, -35, 0.5, -15)
-    closeButton.Text = "X"
-    closeButton.BackgroundColor3 = Color3.fromRGB(255, 70, 70)
-    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    closeButton.Font = Enum.Font.SourceSansBold
-    closeButton.TextSize = 18
-    local closeCorner = Instance.new("UICorner", closeButton)
-    closeCorner.CornerRadius = UDim.new(0, 6)
-    closeButton.MouseButton1Click:Connect(function()
-        mainFrame.Visible = false
-    end)
-
-    local contentFrame = Instance.new("Frame", mainFrame)
-    contentFrame.Size = UDim2.new(1, -20, 1, -50)
-    contentFrame.Position = UDim2.new(0, 10, 0, 40)
-    contentFrame.BackgroundTransparency = 1
-
-    return contentFrame
-end
-
-function SenpaiHub:CreateToggle(parent, text, callback)
-    local button = Instance.new("TextButton", parent)
-    button.Size = UDim2.new(1, 0, 0, 35)
-    button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    button.TextColor3 = Color3.fromRGB(220, 220, 220)
-    button.Font = Enum.Font.SourceSansSemibold
-    button.TextSize = 16
-    button.Text = text .. ": OFF"
-    local corner = Instance.new("UICorner", button)
-    corner.CornerRadius = UDim.new(0, 6)
-
-    local enabled = false
-    button.MouseButton1Click:Connect(function()
-        enabled = not enabled
-        button.Text = text .. ": " .. (enabled and "ON" or "OFF")
-        button.BackgroundColor3 = enabled and Color3.fromRGB(70, 170, 70) or Color3.fromRGB(45, 45, 45)
-        if callback then
-            callback(enabled)
-        end
-    end)
-
-    return button
-end
-
-function SenpaiHub:CreateTextBox(parent, placeholder)
-    local box = Instance.new("TextBox", parent)
-    box.Size = UDim2.new(0.48, 0, 0, 30)
-    box.PlaceholderText = placeholder
-    box.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    box.TextColor3 = Color3.fromRGB(255, 255, 255)
-    box.Font = Enum.Font.SourceSans
-    box.TextSize = 14
-    local corner = Instance.new("UICorner", box)
-    corner.CornerRadius = UDim.new(0, 6)
-    return box
-end
-
-function SenpaiHub:CreateToggleSwitch(parent, text, callback)
-    local container = Instance.new("Frame", parent)
-    container.Size = UDim2.new(1, 0, 0, 30)
-    container.BackgroundTransparency = 1
-
-    local label = Instance.new("TextLabel", container)
-    label.Size = UDim2.new(0.7, 0, 1, 0)
-    label.Text = text
-    label.TextColor3 = Color3.fromRGB(220, 220, 220)
-    label.Font = Enum.Font.SourceSans
-    label.TextSize = 16
-    label.TextXAlignment = Enum.TextXAlignment.Left
-
-    local switch = Instance.new("TextButton", container)
-    switch.Size = UDim2.new(0.2, 0, 1, 0)
-    switch.Position = UDim2.new(0.8, 0, 0, 0)
-    switch.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
-    switch.Text = ""
-    local corner = Instance.new("UICorner", switch)
-    corner.CornerRadius = UDim.new(0, 8)
-
-    local knob = Instance.new("Frame", switch)
-    knob.Size = UDim2.new(0.4, 0, 0.8, 0)
-    knob.Position = UDim2.new(0.1, 0, 0.1, 0)
-    knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    local knobCorner = Instance.new("UICorner", knob)
-    knobCorner.CornerRadius = UDim.new(0, 6)
-
-    local enabled = false
-    switch.MouseButton1Click:Connect(function()
-        enabled = not enabled
-        switch.BackgroundColor3 = enabled and Color3.fromRGB(70, 170, 70) or Color3.fromRGB(180, 50, 50)
-        knob:TweenPosition(
-            enabled and UDim2.new(0.5, 0, 0.1, 0) or UDim2.new(0.1, 0, 0.1, 0),
-            Enum.EasingDirection.Out,
-            Enum.EasingStyle.Quad,
-            0.2,
-            true
-        )
-        if callback then
-            callback(enabled)
-        end
-    end)
-    
-    return container
-end
-
---================================================================================--
---// Main Code
---================================================================================--
-
-local content = SenpaiHub:CreateWindow()
-
-local listLayout = Instance.new("UIListLayout", content)
-listLayout.Padding = UDim.new(0, 10)
-listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-local detectActive = false
-local toggleDetect = SenpaiHub:CreateToggle(content, "Auto Block", function(enabled)
-    detectActive = enabled
+openBtn.MouseButton1Click:Connect(function()
+	settingFrame.Visible = not settingFrame.Visible
+	openBtn.Text = settingFrame.Visible and "<" or ">"
 end)
-toggleDetect.LayoutOrder = 1
 
-local settingsContainer = Instance.new("Frame", content)
-settingsContainer.Size = UDim2.new(1, 0, 0, 140)
-settingsContainer.BackgroundTransparency = 1
-settingsContainer.LayoutOrder = 2
+-- Bubble Button
+local bubble = Instance.new("TextButton", gui)
+bubble.Size = UDim2.new(0, 32, 0, 32)
+bubble.Position = UDim2.new(0, 5, 0.5, -40)
+bubble.Text = "⚙️"
+bubble.BackgroundColor3 = Color3.fromRGB(70, 70, 70) -- Bubble button background
+bubble.TextColor3 = Color3.new(1, 1, 1)
+bubble.Font = Enum.Font.SourceSansBold
+bubble.TextScaled = true
+bubble.Active = true
+bubble.Draggable = true
+local bubbleCorner = Instance.new("UICorner")
+bubbleCorner.CornerRadius = UDim.new(0, cornerRadius)
+bubbleCorner.Parent = bubble
 
-local gridLayout = Instance.new("UIGridLayout", settingsContainer)
-gridLayout.CellSize = UDim2.new(0.48, 0, 0, 30)
-gridLayout.CellPadding = UDim2.new(0.04, 0, 0.1, 0)
-
-local normalBox = SenpaiHub:CreateTextBox(settingsContainer, "M1 Range")
-local specialBox = SenpaiHub:CreateTextBox(settingsContainer, "Dash Q Range")
-local skillBox = SenpaiHub:CreateTextBox(settingsContainer, "Skill Range")
-local skillDelayBox = SenpaiHub:CreateTextBox(settingsContainer, "Skill Hold Time")
-
-local m1AfterEnabled = false
-local m1AfterToggle = SenpaiHub:CreateToggleSwitch(content, "M1 After Block", function(enabled)
-    m1AfterEnabled = enabled
+bubble.MouseButton1Click:Connect(function()
+	mainFrame.Visible = not mainFrame.Visible
 end)
-m1AfterToggle.LayoutOrder = 3
 
-local m1CatchEnabled = false
-local m1CatchToggle = SenpaiHub:CreateToggleSwitch(content, "M1 Catch", function(enabled)
-    m1CatchEnabled = enabled
-end)
-m1CatchToggle.LayoutOrder = 4
+-- Text Box Function
+local function makeBox(size, pos, placeholder)
+	local box = Instance.new("TextBox")
+	box.Size = size
+	box.Position = pos
+	box.PlaceholderText = placeholder
+	box.Text = ""
+	box.BackgroundColor3 = Color3.fromRGB(70, 70, 70) -- Text box background
+	box.TextColor3 = Color3.new(1, 1, 1)
+	box.Font = Enum.Font.SourceSans
+	box.TextScaled = true
+	local boxCorner = Instance.new("UICorner")
+	boxCorner.CornerRadius = UDim.new(0, cornerRadius)
+	boxCorner.Parent = box
+	return box
+end
 
---================================================================================--
---// Backend Functionality (No changes from original)
---================================================================================--
+-- Creating Text Boxes
+local normalBox = makeBox(UDim2.new(0.45, 0, 0, 25), UDim2.new(0.05, 0, 0, 0), "M1")
+local specialBox = makeBox(UDim2.new(0.45, 0, 0, 25), UDim2.new(0.5, 0, 0, 0), "Dash Q")
+local skillBox = makeBox(UDim2.new(0.45, 0, 0, 25), UDim2.new(0.05, 0, 0, 30), "Skill")
+local skillDelayBox = makeBox(UDim2.new(0.45, 0, 0, 25), UDim2.new(0.5, 0, 0, 30), "Hold Skill")
 
+normalBox.Parent = settingFrame
+specialBox.Parent = settingFrame
+skillBox.Parent = settingFrame
+skillDelayBox.Parent = settingFrame
+
+-- Toggle Button Function
+local function createSquareToggle(name, defaultText, posY)
+	local label = Instance.new("TextLabel", mainFrame)
+	label.Text = name
+	label.Size = UDim2.new(0.7, 0, 0, 20)
+	label.Position = UDim2.new(0.05, 0, 0, posY)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.SourceSans
+	label.TextColor3 = Color3.new(1, 1, 1)
+	label.TextScaled = true
+
+	local button = Instance.new("TextButton", mainFrame)
+	button.Size = UDim2.new(0, 25, 0, 25)
+	button.Position = UDim2.new(1, -30, 0, posY)
+	button.Text = "OFF"
+	button.BackgroundColor3 = Color3.fromRGB(70, 70, 70) -- Toggle button color
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.Font = Enum.Font.SourceSansBold
+	button.TextScaled = true
+	local btnCorner = Instance.new("UICorner")
+	btnCorner.CornerRadius = UDim.new(0, cornerRadius)
+	btnCorner.Parent = button
+
+	return button
+end
+
+-- Creating Toggle Buttons
+local m1AfterBtn = createSquareToggle("M1 After Block",  "OFF", 80)
+local m1CatchBtn = createSquareToggle("M1 Catch", "OFF", 110)
+
+-- Backend Variables
 local normalRange, specialRange, skillRange = 30, 50, 50
 local skillDelay = 1.2
+
+-- Toggle Variables
+local m1AfterEnabled = false
+local m1CatchEnabled = false
+
+-- Text box Functionality
 skillDelayBox.Text = tostring(skillDelay)
 
 normalBox.FocusLost:Connect(function()
 	local v = tonumber(normalBox.Text)
 	if v then normalRange = v end
 end)
+
 specialBox.FocusLost:Connect(function()
 	local v = tonumber(specialBox.Text)
 	if v then specialRange = v end
 end)
+
 skillBox.FocusLost:Connect(function()
 	local v = tonumber(skillBox.Text)
 	if v then skillRange = v end
 end)
+
 skillDelayBox.FocusLost:Connect(function()
 	local v = tonumber(skillDelayBox.Text)
 	if v and v > 0 then skillDelay = v end
+end)
+
+-- Toggle button Functionality
+m1AfterBtn.MouseButton1Click:Connect(function()
+	m1AfterEnabled = not m1AfterEnabled
+	m1AfterBtn.Text = m1AfterEnabled and "ON" or "OFF"
+end)
+
+m1CatchBtn.MouseButton1Click:Connect(function()
+	m1CatchEnabled = not m1CatchEnabled
+	m1CatchBtn.Text = m1CatchEnabled and "ON" or "OFF"
 end)
 
 local function fireRemote(goal, mobile)
@@ -403,6 +382,13 @@ local function checkM1Catch()
 		end
 	end
 end
+
+local detectActive = false
+toggleDetect.MouseButton1Click:Connect(function()
+	detectActive = not detectActive
+	toggleDetect.Text = detectActive and "Auto Block: ON" or "Auto Block: OFF"
+	toggleDetect.BackgroundColor3 = detectActive and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(60, 60, 60)
+end)
 
 RunService.Heartbeat:Connect(function()
 	if detectActive then
