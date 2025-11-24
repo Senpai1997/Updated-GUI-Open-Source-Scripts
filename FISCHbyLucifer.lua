@@ -12,7 +12,6 @@ local v127 =
     }
 )
 local v128 = {
-    ["Home"] = v127:AddTab({["Title"] = "Home", ["Icon"] = "rbxassetid://7733960981"}),
     ["Main"] = v127:AddTab({["Title"] = "Main", ["Icon"] = "rbxassetid://7733749837"}),
     ["Misc"] = v127:AddTab({["Title"] = "Misc", ["Icon"] = "rbxassetid://7733789088"}),
     ["Weather"] = v127:AddTab({["Title"] = "Weather", ["Icon"] = "rbxassetid://7734068495"}),
