@@ -1,60 +1,65 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
--- Creating the Window with the header "Senpai Hub"
 local Window = OrionLib:MakeWindow({
     Name = "Senpai Hub", 
     HidePremium = false, 
     SaveConfig = true, 
-    ConfigFolder = "SenpaiHub"
+    ConfigFolder = "SenpaiHubConfig"
 })
 
--- Creating a Main Tab
-local Tab = Window:MakeTab({
+-- Create a Tab
+local MainTab = Window:MakeTab({
 	Name = "Main",
-	Icon = "rbxassetid://448345528",
+	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
 
--- The Function to handle the stamina logic
-local function ToggleStamina(bool)
-    local rns = game:GetService("RunService")
-    
-    -- Check if getconnections exists (Executor supported)
-    if not getconnections then 
-        OrionLib:MakeNotification({
-            Name = "Error",
-            Content = "Your executor does not support getconnections!",
-            Image = "rbxassetid://4483345998",
-            Time = 5
-        })
-        return 
-    end
+-- Variable to store the connections so we can re-enable them later
+local disabledConnections = {}
 
-    for _, cnx in pairs(getconnections(rns.PreRender)) do
-        local func = cnx.Function
-        if func then
-            local src = debug.info(func, "s")
-            if src and src:find("Stamina") then
-                if bool then
-                    -- Switch is ON: Disable stamina drain
-                    cnx:Disable()
-                else
-                    -- Switch is OFF: Enable stamina drain back to normal
-                    cnx:Enable()
-                end
-            end
-        end
-    end
-end
-
--- Creating the Toggle Switch
-Tab:AddToggle({
-	Name = "Infinite Sprint",
+-- The Toggle
+MainTab:AddToggle({
+	Name = "Infinite Sprint (No Stamina Drain)",
 	Default = false,
 	Callback = function(Value)
-		ToggleStamina(Value)
+		local rns = game:GetService("RunService")
+        
+        if Value then
+            -- SWITCH ON: Disable the stamina mechanism
+            -- We loop through connections to find the stamina one
+            for _, cnx in pairs(getconnections(rns.PreRender)) do
+                local success, src = pcall(function() return debug.info(cnx.Function, "s") end)
+                
+                -- Check if debug info was found and if it matches "Stamina"
+                if success and src and src:find("Stamina") then
+                    cnx:Disable()
+                    table.insert(disabledConnections, cnx) -- Save it to the list
+                end
+            end
+            
+            OrionLib:MakeNotification({
+                Name = "Senpai Hub",
+                Content = "Infinite Sprint Enabled!",
+                Image = "rbxassetid://4483345998",
+                Time = 3
+            })
+            
+        else
+            -- SWITCH OFF: Re-enable the stamina mechanism
+            for i, cnx in pairs(disabledConnections) do
+                cnx:Enable()
+            end
+            disabledConnections = {} -- Clear the list
+            
+            OrionLib:MakeNotification({
+                Name = "Senpai Hub",
+                Content = "Sprint mechanism restored.",
+                Image = "rbxassetid://4483345998",
+                Time = 3
+            })
+        end
 	end    
 })
 
--- Initializing the UI
+-- Initialize the Library
 OrionLib:Init()
