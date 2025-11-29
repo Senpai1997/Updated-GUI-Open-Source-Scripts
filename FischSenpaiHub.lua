@@ -33,53 +33,6 @@ v130:SetLibrary(v126)
 v130:BuildInterfaceSection(v128.Settings)
 v129:BuildConfigSection(v128.Settings)
 v127:SelectTab(2 - 1)
-v128.Home:AddButton(
-    {
-        ["Title"] = "Join our discord",
-        ["Description"] = "Click on this button to copy the invite link!",
-        ["Callback"] = function()
-            local v149 = 0
-            local v150
-            while true do
-                if (v149 == 0) then
-                    v150 = ""
-                    if setclipboard then
-                        local v308 = 0
-                        local v309
-                        while true do
-                            if (v308 == 0) then
-                                v309 = 0
-                                while true do
-                                    if (v309 == 0) then
-                                        setclipboard(v150)
-                                        print("Discord invite link copied to clipboard!")
-                                        break
-                                    end
-                                end
-                                break
-                            end
-                        end
-                    else
-                        print("setclipboard function not available.")
-                    end
-                    break
-                end
-            end
-        end
-    }
-)
-v128.Home:AddParagraph(
-    {
-        ["Title"] = "About Our Discord",
-        ["Content"] = "Senpai HUB, the ultimate Roblox exploit hub, now has its very own Discord server! This is your go-to place to stay updated on all the latest features, scripts, and announcements. Here’s what you can do in our server:\nStay Informed:\nGet real-time updates on the latest developments, script releases, and exploit features available in Senpai HUB.\nScript Requests:\nNeed a specific script? Submit your requests, and our team or community may create one for you.\nExclusive Giveaways:\nParticipate in exciting Robux giveaways exclusively for our Discord members.\nCommunity Interaction:\nConnect with like-minded exploit enthusiasts, share tips, and get help from a supportive community.\nMuch More:\nEnjoy sneak peeks, community events, and future features tailored for Senpai HUB users."
-    }
-)
-v128.Home:AddParagraph(
-    {
-        ["Title"] = "Join us",
-        ["Content"] = "Join us now and take your Roblox experience to the next level with Senpai HUB’s dedicated community!"
-    }
-)
 v128.Main:AddButton(
     {
         ["Title"] = "Sell Holding Fish",
